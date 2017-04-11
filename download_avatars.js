@@ -50,12 +50,28 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 }
 
+
+
+// ---- Download each Image in the url --- //
+function downloadImageByURL(url, filePath) {
+  // Making a full path to store all the images
+  var fullFilePath = './' + filePath + '.jpg';
+  // GET images from each url and store it
+  request.get(url)               // Note 1
+       .on('error', function (err) {                                   // Note 2
+         throw err;
+       })
+       .pipe(fs.createWriteStream(fullFilePath));
+
+}
+
+
 //---- Passing some hardcoded values to our getRepo ---------- //
 getRepoContributors("jquery", "jquery" , function(err,result) {
   console.log("Errors:", err);
-// ---- Print out each URL seperately
+// ---- Print out each URL seperately --- //
   for(eachURL of result){
-  console.log("URL:" , eachURL.avatar_url);
+  downloadImageByURL(eachURL.avatar_url, eachURL.login);
   }
 
 });
