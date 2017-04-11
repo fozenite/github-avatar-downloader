@@ -39,10 +39,10 @@ function getRepoContributors(repoOwner, repoName, cb) {
   request(options, function(err, response, body) {
   if (err) throw err;
   console.log('Response Status Code:', response.statusCode);
-  // --- Parse the received data in the body --- //
+  // ----- Parse the received data in the body --- //
   var myParsedData = JSON.parse(body);
-  console.log(myParsedData);  // Test
- // console.log('This is the body' , body);
+  cb(err, myParsedData);
+
 });
 
 
@@ -53,5 +53,9 @@ function getRepoContributors(repoOwner, repoName, cb) {
 //---- Passing some hardcoded values to our getRepo ---------- //
 getRepoContributors("jquery", "jquery" , function(err,result) {
   console.log("Errors:", err);
-  console.log("Result" , result);
+// ---- Print out each URL seperately
+  for(eachURL of result){
+  console.log("URL:" , eachURL.avatar_url);
+  }
+
 });
