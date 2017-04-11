@@ -2,8 +2,7 @@
 var request = require('request');
 // ---- Load the file system Module --- //
 var fs = require('fs');
-//---- Welcome message to users ----//
-console.log('Welcome to the GitHub Avatar Downloader!');
+
 
 
 // -- Setting up constants for our getRepoContributors function ---//
@@ -45,9 +44,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 });
 
-
-
-
 }
 
 
@@ -57,21 +53,34 @@ function downloadImageByURL(url, filePath) {
   // Making a full path to store all the images
   var fullFilePath = './' + filePath + '.jpg';
   // GET images from each url and store it
-  request.get(url)               // Note 1
-       .on('error', function (err) {                                   // Note 2
+  request.get(url)
+       .on('error', function (err) {
          throw err;
        })
        .pipe(fs.createWriteStream(fullFilePath));
 
 }
 
+// Getting command line arguments for our Repo Owner and User Name //
+var repoOwner = process.argv[2];
+var repoName  = process.argv[3];
+
+if((!repoOwner) || (!repoName)){
+  console.log("Error you not specified Repo Owner Name or Repo Name ");
+} else {
+
+//---- Welcome message to users ----//
+console.log('Welcome to the GitHub Avatar Downloader!');
 
 //---- Passing some hardcoded values to our getRepo ---------- //
-getRepoContributors("jquery", "jquery" , function(err,result) {
+getRepoContributors(repoOwner, repoName, function(err,result) {
   console.log("Errors:", err);
 // ---- Print out each URL seperately --- //
   for(eachURL of result){
   downloadImageByURL(eachURL.avatar_url, eachURL.login);
   }
 
-});
+  });
+}
+
+
